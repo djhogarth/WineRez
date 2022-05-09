@@ -6,6 +6,8 @@ namespace Domain.Interfaces
     {
         Task<Product> GetProductByIdAsync(int id);
 
-        Task<IReadOnlyList<Entities.Product>> GetProductsAsync();
+        Task<IReadOnlyList<Product>> GetProductsAsync();
+        Task<IReadOnlyList<ProductBrand>> GetProductBrandsAsync();
+        Task<IReadOnlyList<ProductType>> GetProductTypesAsync();
     }
 }
