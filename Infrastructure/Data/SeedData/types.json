@@ -1,0 +1,26 @@
+[
+  {
+    "Id": 1,
+    "Name": "Red Wine"
+  },
+  {
+    "Id": 2,
+    "Name": "White Wine"
+  },
+  {
+    "Id": 3,
+    "Name": "Rosé Wine"
+  },
+  {
+    "Id": 4,
+    "Name": "Sparkling Wine"
+  },
+  {
+    "Id": 5,
+    "Name": "Dessert Wine"
+  },
+  {
+    "Id": 6,
+    "Name": "Fortified Wine"
+  }
+]
