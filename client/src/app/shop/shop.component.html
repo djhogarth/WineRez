@@ -1,5 +1,52 @@
-<ul>
-  <li class="list-unstyled" *ngFor="let product of products">
-    {{product.name}}
-  </li>
-</ul>
+<!-- shop page -->
+
+<div class="container">
+  <div class="row">
+    <!-- Side Bar Section -->
+    <section class="col-3">
+      <!-- Sorting Selector -->
+      <h5 class="text-danger ms-3">Sort</h5>
+      <select class="custom-select mb-3">
+        <option selected>Alphabetical</option>
+        <option>Price: Low to High</option>
+        <option>Price: High to Low</option>
+      </select>
+
+      <!-- Types Filter -->
+      <h5 class="text-danger ms-3">Types</h5>
+      <ul class="list-group my-3">
+        <li class="list-group-item" *ngFor="let type of types">
+          {{type.name}}
+        </li>
+      </ul>
+
+      <!-- Brands Filter -->
+      <h5 class="text-danger ms-3">Brands</h5>
+      <ul class="list-group my-3">
+       <li class="list-group-item" *ngFor="let brand of brands">
+        {{brand.name}}
+       </li>
+      </ul>
+    </section>
+
+    <!-- Main Content Section -->
+    <section class="col-9">
+      <div class="d-flex justify-content-between align-items-center pb-2">
+        <header>
+          <span>Showing <strong>12</strong> of <strong>30</strong> Results</span>
+        </header>
+        <!-- Search Bar -->
+        <div class="d-flex mt-2">
+          <input class="form-control me-2" type="search" style="width: 300px" placeholder="Search">
+          <button class="btn btn-primary">Search</button>
+          <button class="btn btn-success ms-2">Reset</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4 mb-4" *ngFor="let item of products">
+          <app-product-item [product]="item"></app-product-item>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
