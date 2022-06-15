@@ -15,7 +15,12 @@
       <!-- Types Filter -->
       <h5 class="text-danger ms-3">Types</h5>
       <ul class="list-group my-3">
-        <li class="list-group-item" *ngFor="let type of types">
+        <li class="list-group-item"
+          *ngFor="let type of types"
+          [class.active]="type.id === this.selectedTypeId"
+          [value]="type.id"
+          (click)="OnTypeSelected(type.id)"
+          >
           {{type.name}}
         </li>
       </ul>
@@ -23,7 +28,12 @@
       <!-- Brands Filter -->
       <h5 class="text-danger ms-3">Brands</h5>
       <ul class="list-group my-3">
-       <li class="list-group-item" *ngFor="let brand of brands">
+       <li class="list-group-item"
+          *ngFor="let brand of brands"
+          [class.active]="brand.id === selectedBrandId"
+          [value]="brand.id"
+          (click)="OnBrandSelected(brand.id)"
+        >
         {{brand.name}}
        </li>
       </ul>
