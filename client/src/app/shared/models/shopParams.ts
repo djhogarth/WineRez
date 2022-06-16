@@ -5,5 +5,6 @@ export class ShopParams
   selectedSort = 'name';
   pageNumber = 1;
   pageSize = 12;
+  search: string;
 
 }
