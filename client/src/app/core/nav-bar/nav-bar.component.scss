@@ -13,7 +13,17 @@
 
 a {
   text-decoration: none;
-  color: maroon;
-  
+  color: #343a40;
+
+  &.active
+  {
+    color: maroon;
+    font-weight: bold;
+  }
+}
+
+.logo
+{
+  cursor: pointer;
 }
 
