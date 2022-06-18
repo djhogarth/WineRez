@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { IPagination } from '../shared/models/pagination';
+import { IProduct } from '../shared/models/product';
 import { IBrand } from '../shared/models/productBrand';
 import { IType } from '../shared/models/productType';
 import { ShopParams } from '../shared/models/shopParams';
@@ -14,6 +15,7 @@ export class ShopService {
 
   constructor(private http: HttpClient) { }
 
+  //get all products from the API so the template can display them
   getProducts(shopParams: ShopParams)
   {
     let params = new HttpParams();
@@ -40,15 +42,18 @@ export class ShopService {
     params = params.append('pageSize', shopParams.pageSize.toString());
 
 
-
-
-
     return this.http.get<IPagination>(this.baseUrl + 'products', {observe: 'response', params})
       .pipe(
         map(response => {
           return response.body;
         })
       );
+  }
+
+  //get an individual product so the proudct details' template can display it
+  getProduct(id: number)
+  {
+    return this.http.get<IProduct>(this.baseUrl + 'products/' + id);
   }
 
   getBrands()
