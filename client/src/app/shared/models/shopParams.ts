@@ -4,7 +4,7 @@ export class ShopParams
   selectedBrandId = 0;
   selectedSort = 'name';
   pageNumber = 1;
-  pageSize = 12;
+  pageSize = 9;
   search: string;
 
 }
