@@ -5,14 +5,17 @@
 
 .btn
 {
-  width: 50%;
+  width: 30%;
+  height: 2.5rem;
 }
+
 
 img
 {
-min-height:500px;
-min-width: 200px;
-max-height: 850px;
+min-height: 31.25rem;
+min-width: 12.5rem;
+max-height: 53.125rem;
+aspect-ratio: 1.5 / 4;
 
 }
 
