@@ -12,6 +12,7 @@
   <ItemGroup>
    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4" />
   <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="1.1.6" />
+  <PackageReference Include="StackExchange.Redis" Version="2.6.45" />
   </ItemGroup>
 
 </Project>
