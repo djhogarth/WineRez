@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Basket, IBasket, IBasketItem } from '../shared/models/basket';
+import { Basket, IBasket, IBasketItem, IBasketTotals } from '../shared/models/basket';
 import { IProduct } from '../shared/models/product';
 
 @Injectable({
@@ -13,6 +13,8 @@ export class BasketService
   baseUrl = environment.apiBaseUrl;
   private basketSource = new BehaviorSubject<IBasket>(null);
   basketSource$ = this.basketSource.asObservable();
+  private basketTotalSource = new BehaviorSubject<IBasketTotals>(null);
+  basketTotal$ = this.basketTotalSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +25,7 @@ export class BasketService
         map((basket: IBasket) =>
         {
           this.basketSource.next(basket);
-          console.log(this.basketSource.value);
+          this.calculateBasketTotal();
         })
       );
   }
@@ -33,8 +35,8 @@ export class BasketService
     return this.http.post(this.baseUrl + 'basket', basket).subscribe((response: IBasket) =>
     {
       this.basketSource.next(response);
-    }, error =>
-    {
+      this.calculateBasketTotal();
+    }, error => {
       console.log(error);
     });
   }
@@ -42,6 +44,22 @@ export class BasketService
   getCurrentBasketValue()
   {
     return this.basketSource.value;
+  }
+
+  private calculateBasketTotal()
+  {
+    const basket = this.getCurrentBasketValue();
+    const shippingCost = 0;
+
+    /*The 'a' represents the cumulative amount of the product
+      prices which is returned by the reduce function.
+      It is set to start at a value of 0. The 'b' represnets
+      each product item in the array. */
+    const subtotal = basket.items.reduce((a,b) => (b.price *b.quantity) + a, 0);
+    const total = subtotal + shippingCost;
+
+    // create the IBaskeTotals object and store in  the observable
+    this.basketTotalSource.next({shippingCost,total, subtotal});
   }
 
   addItemToBasket(item: IProduct, quantity = 1)
@@ -67,10 +85,15 @@ export class BasketService
    return items;
   }
 
-  private createBasket(): IBasket {
+  private createBasket(): IBasket
+  {
     const basket = new Basket();
-    //persisting the basket client side by storing the basket ID in local storage
+
+    /*persisting the basket ID by storing
+      the basket ID in broswer local storage to
+      fetch the basket on app start up */
     localStorage.setItem('basket_id', basket.id)
+
     return basket;
   }
 
