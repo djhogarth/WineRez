@@ -20,5 +20,11 @@ import { v4 as uuidv4} from 'uuid';
   {
     id = uuidv4();
     items: IBasketItem[] = [];
+  }
 
+  export interface IBasketTotals
+  {
+    shippingCost: number;
+    subtotal: number;
+    total: number;
   }
