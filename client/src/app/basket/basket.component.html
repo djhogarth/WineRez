@@ -58,19 +58,21 @@
                     <td class="align-middle"> <strong>{{item.price | currency}}</strong></td>
                     <td class="align-middle">
                       <div class="d-flex align-items-center">
-                        <i class="fa fa-minus-circle text-success ms-3 me-1 mt-1"
+                        <!-- Increment and decrement item quantity -->
+                        <i (click)="decrementItemQuantity(item)" class="fa fa-minus-circle text-success ms-3 me-1 mt-1"
                           style="cursor: pointer; font-size: 2em;"></i>
                         <span class="mt-1" style="font-weight: bold; font-size: 1.25em;">
                           {{item.quantity}}
                         </span>
-                        <i class="fa fa-plus-circle text-success mt-1 ms-1"
+                        <i (click)="incrementItemQuantity(item)"  class="fa fa-plus-circle text-success mt-1 ms-1"
                           style="cursor: pointer; font-size: 2em;"></i>
                       </div>
                     </td>
                     <td class="align-middle"><strong>{{item.price * item.quantity | currency}}</strong></td>
                     <td class="align-middle">
+                      <!-- Remove Item from cart -->
                       <a class="text-danger">
-                        <i class="fa fa-trash-o" style="font-size: 2em;"></i>
+                        <i (click)="removeBasketItem(item)" class="fa fa-trash-o" style="font-size: 2em;"></i>
                       </a>
                     </td>
                   </tr>

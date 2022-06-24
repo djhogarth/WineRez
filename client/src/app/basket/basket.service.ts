@@ -85,6 +85,63 @@ export class BasketService
    return items;
   }
 
+  //increment quantity of item in the shopping cart
+  incrementItemQuantity(item: IBasketItem)
+  {
+    const basket = this.getCurrentBasketValue();
+    const foundItemIndex = basket.items.findIndex(x => x.id == item.id);
+    basket.items[foundItemIndex].quantity++;
+    this.setBasket(basket);
+  }
+
+  //decrement quantity of item in the shopping cart
+  decrementItemQuantity(item: IBasketItem)
+  {
+    const basket = this.getCurrentBasketValue();
+    const foundItemIndex = basket.items.findIndex(x => x.id == item.id);
+
+    /*If item quantity is greater than one, the decrement the quantity,
+      if not then remove the item altogether */
+    if(basket.items[foundItemIndex].quantity > 1)
+    {
+      basket.items[foundItemIndex].quantity--;
+      this.setBasket(basket);
+    } else {
+      this.removeItemFromBasket(item);
+    }
+  }
+
+  removeItemFromBasket(item: IBasketItem)
+  {
+    const basket = this.getCurrentBasketValue();
+
+    if(basket.items.some(x => x.id === item.id))
+    {
+      /*filter method returns all items with ids that
+        do not match selected item's id*/
+      basket.items = basket.items.filter(i => i.id !== item.id);
+      if(basket.items.length > 0)
+      {
+        this.setBasket(basket);
+      } else {
+        this.deleteBasket(basket);
+      }
+    }
+  }
+
+  deleteBasket(basket: IBasket)
+  {
+    return this.http.delete(this.baseUrl + 'basket?basketId=' + basket.id).subscribe(() =>
+    {
+      this.basketSource.next(null);
+      this.basketTotalSource.next(null);
+      localStorage.removeItem('basket_id');
+    }, error => {
+      console.log(error);
+    });
+  }
+
+
   private createBasket(): IBasket
   {
     const basket = new Basket();
