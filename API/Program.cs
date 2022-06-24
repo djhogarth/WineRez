@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Domain.Entities.Identity;
 using Infrastructure.Data;
 using Infrastructure.Data.SeedData;
-using Microsoft.AspNetCore.Hosting;
+using Infrastructure.Identiity;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace API
 {
@@ -19,13 +15,23 @@ namespace API
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
             {
-                var Services = scope.ServiceProvider;
-                var loggerFactory = Services.GetRequiredService<ILoggerFactory>();
+                var services = scope.ServiceProvider;
+                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try 
                 {
-                    var context = Services.GetRequiredService<StoreContext>();
+                    //getting the service handling the store's DbContext
+                    var context = services.GetRequiredService<StoreContext>();
+                     // Create the store database and add the seed data
                     await context.Database.MigrateAsync();
                     await StoreContextSeed.SeedAsync(context, loggerFactory);
+
+                    //getting the UserManger service
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                    //get the service for the AppIdentityDbContext
+                    var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+                    // Create the identity database and add the seed data
+                    await identityContext.Database.MigrateAsync();
+                    await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
                 }
                 catch (Exception ex)
                 {
