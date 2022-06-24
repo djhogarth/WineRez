@@ -7,11 +7,13 @@
        </div>
      <div class="d-flex justify-content-start">
        <h4 class="mt-1">{{product.price | currency}}</h4>
-       <i class="fa fa-minus-circle text-success ms-3 me-1 mt-1"
+       <!-- Increment and decrement the quantity -->
+       <i (click)="decrementQuantity()" class="fa fa-minus-circle text-success ms-3 me-1 mt-1"
          style="cursor: pointer; font-size: 2em;"></i>
-       <span class="mt-1" style="font-weight: bold; font-size: 1.25em;">1</span>
-       <i class="fa fa-plus-circle text-success mt-1 ms-1" style="cursor: pointer; font-size: 2em;"></i>
-       <button class="ms-4 btn btn-secondary btn-md">
+       <span class="mt-1" style="font-weight: bold; font-size: 1.25em;">{{quantity}}</span>
+       <i (click)="incrementQuantity()" class="fa fa-plus-circle text-success mt-1 ms-1" style="cursor: pointer; font-size: 2em;"></i>
+        <!-- Add the item to the cart -->
+       <button (click)="addItemToBasket()" class="ms-4 btn btn-secondary btn-md">
          Add to Cart
        </button>
      </div>

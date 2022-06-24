@@ -9,6 +9,7 @@ import { IProduct } from 'src/app/shared/models/product';
 })
 export class ProductItemComponent implements OnInit {
   @Input() product: IProduct;
+  itemQuantity = 1;
 
   constructor(private basketService: BasketService) { }
 
@@ -19,6 +20,6 @@ export class ProductItemComponent implements OnInit {
 
   addProductToBasket()
   {
-    this.basketService.addItemToBasket(this.product);
+    this.basketService.addItemToBasket(this.product, this.itemQuantity);
   }
 }

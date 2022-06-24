@@ -62,7 +62,7 @@ export class BasketService
     this.basketTotalSource.next({shippingCost,total, subtotal});
   }
 
-  addItemToBasket(item: IProduct, quantity = 1)
+  addItemToBasket(item: IProduct, quantity: number)
   {
     const itemToAdd: IBasketItem = this.mapProductItemToBasketItem(item, quantity);
     const basket = this.getCurrentBasketValue() ?? this.createBasket();
