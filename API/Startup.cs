@@ -23,19 +23,24 @@ namespace API
             services.AddAutoMapper(typeof(MappingProfiles));
 
             services.AddControllers();
+            //Add a service for the store's DbContext
             services.AddDbContext<StoreContext>(x =>
                 x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
 
+            //Add a service for the Identity DbContext
             services.AddDbContext<AppIdentityDbContext>( x=>
             {
                 x.UseSqlite(_config.GetConnectionString("IdentityConnection"));
             });
+
+            //Add a service for Redis
             services.AddSingleton<IConnectionMultiplexer>(c => 
             {
                var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
                return ConnectionMultiplexer.Connect(configuration);
             });
             services.AddApplicationServices();
+            services.AddIdentityServices();
             services.AddSwaggerDocumentation();            
             services.AddCors(opt =>
             {
