@@ -35,6 +35,13 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
         {
+            //Check if the email already exist and return a user friendly error response
+            if(CheckEmailExisitsAsync(registerDTO.Email).Result.Value)
+            {
+                var errors = new [] {"The email address you entered already exists"};
+                return new BadRequestObjectResult(new ApiValidationErrorResponse{Errors = errors});
+            }
+
             // create a new app user object from the given information
             var user = new AppUser
             {
