@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { AccountService } from './account/account.service';
 import { BasketService } from './basket/basket.service';
 import { IPagination } from './shared/models/pagination';
 import { IProduct } from './shared/models/product';
@@ -13,9 +14,30 @@ export class AppComponent implements OnInit
 {
   title = 'WineRez';
 
-  constructor(private basketService: BasketService) {}
+  constructor(private basketService: BasketService, private accountService: AccountService) {}
 
   ngOnInit(): void
+  {
+    this.loadBasket();
+    this.loadCurrentUser();
+  }
+
+  loadCurrentUser()
+  {
+    const token = localStorage.getItem('token');
+    if(token)
+    {
+      this.accountService.loadCurrentUser(token).subscribe(() =>
+      {
+        console.log('current is user loaded... with wine that is :D');
+      }, error =>
+      {
+        console.log(error);
+      });
+    }
+  }
+
+  loadBasket()
   {
     const basketId = localStorage.getItem('basket_id');
     if(basketId)

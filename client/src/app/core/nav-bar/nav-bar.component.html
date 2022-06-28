@@ -1,7 +1,7 @@
 <div class="d-flex flex-column flex-md-row
   align-items-center justify-content-between p-1 px-md-4
   mb-3 bg-white border-bottom shadow-sm fixed-top">
-  <img class="logo ms-4" src="/assets/images/logo-1.png" style="max-height:
+  <img class="logo ms-4" src="/assets/images/wine-logo-3.png" style="max-height:
     4.375rem;" alt="logo" routerLink="/">
   <nav class="my-2 my-md-0 mr-md-3 text-uppercase" style="font-size: larger;">
     <a class="p-2" [routerLink]="['/']" routerLinkActive="active"
@@ -14,8 +14,38 @@
       <i class="fa fa-shopping-cart fa-2x me-5 text-dark"></i>
       <div *ngIf="(basket$ | async) as basket" class="cart-no">{{basket.items.length}}</div>
     </a>
-    <a routerLink="/account/login" class="btn btn-outline-secondary me-2">Login</a>
-    <a routerLink="/account/register" class="btn btn-outline-secondary me-3">Sign up</a>
-  </div>
+    <!-- If user is not logged, display login and register buttons -->
+    <ng-container *ngIf="(currentUser$ | async) === null">
+      <a routerLink="/account/login" class="btn btn-outline-secondary me-2">Login</a>
+      <a routerLink="/account/register" class="btn btn-outline-secondary me-3">Sign up</a>
+    </ng-container>
 
+    <!-- If user is logged in, display their name and a welcome -->
+    <ng-container *ngIf="(currentUser$ | async) as user">
+      <div class="dropdown ms-3 me-5" dropdown>
+        <a class="dropdown-toggle" style="cursor: pointer;" dropdownToggle>
+          <strong>Welcome {{user.displayName}}!</strong>
+        </a>
+
+        <div class="dropdown-menu" style="cursor: pointer;" *dropdownMenu>
+          <a routerLink="/basket" class="dropdown-item d-flex align-items-center py-2">
+            <i class="fa fa-shopping-cart me-3">
+              View Basket
+            </i>
+          </a>
+          <a routerLink="/orders" class="dropdown-item d-flex align-items-center py-2">
+            <i class="fa fa-history me-3">
+              View Orders
+            </i>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a (click)="logOut()" class="dropdown-item d-flex align-items-center py-2">
+            <i class="fa fa-sign-out me-3">
+              Log Out
+            </i>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </div>
 </div>
