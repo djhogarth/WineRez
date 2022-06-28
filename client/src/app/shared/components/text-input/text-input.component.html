@@ -17,7 +17,7 @@
   <label for="{{label}}"> {{label | titlecase}}</label>
   <div class="invalid-feedback ms-2" *ngIf="(controlDir && controlDir.control
     && !controlDir.control.valid && controlDir.control.touched)">
-    <span *ngIf="controlDir.control.errors?.required"> Please enter your {{type}}.</span>
-    <span *ngIf="controlDir.control.errors?.pattern"> The {{type}} is not in a valid format.</span>
+    <span *ngIf="controlDir.control.errors?.required"> Please enter your {{label | lowercase}}.</span>
+    <span *ngIf="controlDir.control.errors?.pattern"> The {{label | lowercase}} is not in a valid format.</span>
   </div>
 </div>

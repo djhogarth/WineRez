@@ -1,1 +1,19 @@
-<p>register works!</p>
+<div class="d-flex justify-content-center my-2">
+  <div class="col-3 form-signin">
+    <form  [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="text-center mb-3">
+        <i class="fa fa-user-plus fa-5x mb-3" aria-hidden="true"></i>
+        <h1 class="h3 fw-normal">Create Account</h1>
+      </div>
+      <!-- Display Name -->
+      <app-text-input formControlName="displayName" [label]="'Username'"></app-text-input>
+      <!-- Email -->
+     <app-text-input [type]="'email'" formControlName="email" [label]="'Email'"></app-text-input>
+     <!-- Password -->
+     <app-text-input [type]="'password'" formControlName="password" [label]="'Password'"></app-text-input>
+
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+    </form>
+  </div>
+</div>
+

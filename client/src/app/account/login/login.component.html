@@ -1,35 +1,17 @@
-<div class="d-flex justify-content-center my-3">
-  <div class="col-3">
-    <form  [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-signin">
+<div class="d-flex justify-content-center my-2">
+  <div class="col-3 form-signin">
+    <form  [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="text-center mb-3">
-        <img class="img-fluid" src="/assets/images/user-wine.jpg" width="150" height="150" alt="">
+        <img class="img-fluid" src="/assets/images/user-wine.jpg" width="150" height="150" alt="WineRez">
         <!-- <i class="fa fa-user fa-4x" aria-hidden="true"></i> -->
         <h1 class="h3 fw-normal">Login</h1>
       </div>
       <!-- Email input -->
-      <div class="form-floating">
-        <input formControlName="email" type="email" class="form-control" placeholder="name@example.com">
-        <label for="inputEmail">Email address</label>
-        <span class="text-danger" *ngIf="loginForm.get('email').invalid
-          && loginForm.get('email').touched && loginForm.get('email').errors['required']">
-          <p class="ms-2">Enter an email address.</p>
-        </span>
-        <span class="text-danger" *ngIf="loginForm.get('email').invalid
-          && loginForm.get('email').touched && loginForm.get('email').errors['pattern']">
-          <p class="ms-2">The email address is not in a valid format.</p>
-        </span>
-      </div>
-      <!-- Password input -->
-      <div class="form-floating">
-        <input formControlName="password" type="password" class="form-control" placeholder="Password">
-        <label for="inputPassword">Password</label>
-        <span class="text-danger" *ngIf="loginForm.get('password').invalid
-          && loginForm.get('password').touched && loginForm.get('password').errors['required']">
-          <p class="ms-2">Enter a password.</p>
-        </span>
-      </div>
+     <app-text-input [type]="'email'" formControlName="email" [label]="'email'"></app-text-input>
+     <!-- Password input -->
+     <app-text-input [type]="'password'" formControlName="password" [label]="'password'"></app-text-input>
 
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+    <button [disabled]="loginForm.invalid" class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
     </form>
   </div>
 </div>
