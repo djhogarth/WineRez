@@ -1,0 +1,23 @@
+<div class="form-floating mb-2">
+  <input
+    #input
+    class="form-control"
+    [ngClass]="(controlDir
+      && controlDir.control
+      && controlDir.control.touched)
+      ? !controlDir.control.valid
+      ? 'is-invalid' : 'is-valid' : null"
+    (input)="onChange($event.target.value)"
+    (blur)="onTouched()"
+    type="{{type}}"
+    id="{{label}}"
+    placeholder="{{label | titlecase}}"
+
+  >
+  <label for="{{label}}"> {{label | titlecase}}</label>
+  <div class="invalid-feedback ms-2" *ngIf="(controlDir && controlDir.control
+    && !controlDir.control.valid && controlDir.control.touched)">
+    <span *ngIf="controlDir.control.errors?.required"> Please enter your {{type}}.</span>
+    <span *ngIf="controlDir.control.errors?.pattern"> The {{type}} is not in a valid format.</span>
+  </div>
+</div>
