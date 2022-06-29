@@ -13,8 +13,13 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   constructor(private loadingService: LoadingService) {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    this.loadingService.loading();
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>>
+  {
+    // don't display the page loader for email validation request
+    if(!request.url.includes('emailexists'))
+    {
+      this.loadingService.loading();
+    }
     return next.handle(request).pipe(
       delay(1000),
       finalize(() => {

@@ -12,12 +12,26 @@
     type="{{type}}"
     id="{{label}}"
     placeholder="{{label | titlecase}}"
-
   >
+
+  <!-- Input label -->
   <label for="{{label}}"> {{label | titlecase}}</label>
+  <!-- check the control status for pending. The spinner
+     should only display the spinner for asynchronous
+     validation like when checking of the exisits -->
+  <div *ngIf="controlDir && controlDir.control
+    && controlDir.control.status === 'PENDING'"
+    class="fa fa-spinner fa-spin loader">
+  </div>
+  <!-- synchronous validation -->
   <div class="invalid-feedback ms-2" *ngIf="(controlDir && controlDir.control
     && !controlDir.control.valid && controlDir.control.touched)">
     <span *ngIf="controlDir.control.errors?.required"> Please enter your {{label | lowercase}}.</span>
     <span *ngIf="controlDir.control.errors?.pattern"> The {{label | lowercase}} is not in a valid format.</span>
+  </div>
+  <!-- Async validation -->
+  <div class="invalid-feedback d-block ms-2" *ngIf="(controlDir && controlDir.control
+    && !controlDir.control.valid && controlDir.control.dirty)">
+    <span *ngIf="controlDir.control.errors?.emailExists"> An account is already using this email address</span>
   </div>
 </div>

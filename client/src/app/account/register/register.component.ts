@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AsyncValidatorFn, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { map, of, switchMap, timer } from 'rxjs';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { AccountService } from '../account.service';
 export class RegisterComponent implements OnInit
 {
   registerForm: FormGroup;
+  errors: string[];
 
   constructor(private formBuilder: FormBuilder,
      private accountService: AccountService, private router: Router) { }
@@ -24,7 +26,12 @@ export class RegisterComponent implements OnInit
   {
     this.registerForm = this.formBuilder.group({
       displayName: [null, Validators.required],
-      email: [null, [Validators.required, Validators.pattern('^[\\w-\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')]],
+      email: [null,
+        [
+          Validators.required,
+          Validators.pattern('^[\\w-\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
+        ],
+        [this.validateEmailNotTaken()]],
       password: [null, Validators.required]
     });
   }
@@ -37,7 +44,30 @@ export class RegisterComponent implements OnInit
     }, error =>
     {
       console.log(error);
+      this.errors = error.errors;
     });
+  }
+
+  validateEmailNotTaken(): AsyncValidatorFn
+  {
+    return control =>
+    {
+      return timer(500).pipe(
+        switchMap(() =>
+        {
+          if (!control.value)
+          {
+            return of(null);
+          }
+          return this.accountService.checkEmailExists(control.value).pipe(
+            map(response =>
+              {
+                return response ? {emailExists: true} : null;
+              })
+          );
+        })
+      );
+    };
   }
 
 }
