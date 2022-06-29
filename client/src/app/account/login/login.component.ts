@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -10,11 +10,17 @@ import { AccountService } from '../account.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  returnUrl: string;
 
-  constructor(private accountService : AccountService, private router: Router) { }
+  constructor(private accountService : AccountService,
+    private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void
   {
+    /*  Check if the auth guard has passed a return URL and store it;
+        If not, then set the return url as the shop page's URL. */
+    this.returnUrl = this.activatedRoute.snapshot.queryParams.returnUrl || 'shop';
+    // create the login form when this component is initialized
     this.createLoginForm();
   }
 
@@ -31,7 +37,7 @@ export class LoginComponent implements OnInit {
   {
     this.accountService.login(this.loginForm.value).subscribe(() =>
     {
-      this.router.navigateByUrl('/shop');
+      this.router.navigateByUrl(this.returnUrl);
     }, error =>
     {
       console.log(error);
