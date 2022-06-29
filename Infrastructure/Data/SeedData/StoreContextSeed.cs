@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Domain.Entities;
+using Domain.Entities.OrderAggregate;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Data.SeedData
@@ -14,6 +11,7 @@ namespace Infrastructure.Data.SeedData
         {
             try
             {
+                // Insert product brands seed data
                 if (!context.ProductBrands.Any())
                 {
                     var brandsData = File.ReadAllText("../Infrastructure/Data/SeedData/brands.json");
@@ -28,6 +26,7 @@ namespace Infrastructure.Data.SeedData
                     await context.SaveChangesAsync();
                 }
 
+                // Insert product types seed data
                 if (!context.ProductTypes.Any())
                 {
                     var typesData = File.ReadAllText("../Infrastructure/Data/SeedData/types.json");
@@ -42,6 +41,7 @@ namespace Infrastructure.Data.SeedData
                     await context.SaveChangesAsync();
                 }
 
+                // Insert products seed data
                 if(!context.Products.Any())
                 {
                     var productsData = File.ReadAllText("../Infrastructure/Data/SeedData/products.json");
@@ -51,6 +51,20 @@ namespace Infrastructure.Data.SeedData
                     foreach (var item in products)
                     {
                         context.Products.Add(item);
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+                // Insert delivery methods seed data
+                if (!context.DeliveryMethods.Any())
+                {
+                    var deliveryMethodData = File.ReadAllText("../Infrastructure/Data/SeedData/delivery.json");
+
+                    var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryMethodData);
+
+                    foreach (var method in methods)
+                    {
+                        context.DeliveryMethods.Add(method);
                     }
 
                     await context.SaveChangesAsync();
