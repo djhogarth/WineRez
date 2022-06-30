@@ -6,6 +6,7 @@ using API.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Entities.Identity;
+using Domain.Entities.OrderAggregate;
 
 namespace API.Helpers
 {
@@ -18,10 +19,13 @@ namespace API.Helpers
                 .ForMember(d => d.ProductType, o => o.MapFrom(s => s.ProductType.Name))
                 .ForMember(d => d.ProductType, o => o.MapFrom(s => s.ProductType.Name))
                 .ForMember(d => d.PictureUrl, o => o.MapFrom<ProductUrlResolver>());
-            CreateMap<Address, AddressDTO>().ReverseMap();
+            CreateMap<Domain.Entities.Identity.Address, AddressDTO>().ReverseMap();
             CreateMap<CustomerBasketDTO, CustomerBasket>();
             CreateMap<BasketItemDTO, BasketItem>();
             CreateMap<AddressDTO, Domain.Entities.OrderAggregate.Address>();
+            CreateMap<Order, OrderToReturnDTO>();
+            CreateMap<OrderItem, OrderItemDTO>();
+
 
         }
     }
