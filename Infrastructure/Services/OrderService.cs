@@ -2,25 +2,19 @@
 using Domain.Entities;
 using Domain.Entities.OrderAggregate;
 using Domain.Interfaces;
+using Domain.Specifications;
 
 namespace Infrastructure.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly IGenericRepository<Order> _orderRepository;
-        private readonly IGenericRepository<DeliveryMethod> _deliveryMethodRepository;
-        private readonly IGenericRepository<Product> _productRepository;
         private readonly IBasketRepository _basketRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public OrderService(IGenericRepository<Order> orderRepository, 
-            IGenericRepository<DeliveryMethod> deliveryMethodRepository, 
-            IGenericRepository<Product> productRepository,
-            IBasketRepository basketRepository)
+        public OrderService(IBasketRepository basketRepository, IUnitOfWork unitOfWork)
         {
-            _orderRepository = orderRepository;
-            _deliveryMethodRepository = deliveryMethodRepository;
-            _productRepository = productRepository;
             _basketRepository = basketRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Order> CreatedOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, Address shippingAddress)
@@ -31,36 +25,46 @@ namespace Infrastructure.Services
             var items = new List<OrderItem>();
             foreach(var item in basket.Items)
             {
-                var productItem = await _productRepository.GetByIdAsync(item.Id);
+                var productItem = await _unitOfWork.Repository<Product>().GetByIdAsync(item.Id);
                 var itemOrdered = new ProductItemOrdered(productItem.Id, productItem.Name, productItem.PictureUrl);
                 var orderItem = new OrderItem(itemOrdered, productItem.Price, item.Quantity);
                 items.Add(orderItem);
             }
             // get delivery method from the repository
-            var deliveryMethod = await _deliveryMethodRepository.GetByIdAsync(deliveryMethodId);
+            var deliveryMethod = await _unitOfWork.Repository<DeliveryMethod>().GetByIdAsync(deliveryMethodId);
             // calculate the subtotal
             var subtotal = items.Sum( item => item.Price * item.Quantity);
             // create the order
             var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal);
-            // save the order to the database (skip for now)
+            _unitOfWork.Repository<Order>().Add(order);
+            // save the order to the database
+            var result = await _unitOfWork.Complete();
+            if(result <= 0) return null;
+            //delete basket if order was successfully saved to database
+            await _basketRepository.DeleteCustomerBasketAsync(basketId);
+            
             // return the order
             return order;
         }
 
-        public Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
+        public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.Repository<DeliveryMethod>().ListAllAsync();
         }
 
-        public Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
+        public async Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
         {
-             throw new NotImplementedException();
+             var specification = new OrdersWithItemsAndOrderingSpecification(id, buyerEmail);
+
+             return await _unitOfWork.Repository<Order>().GetEntityWithSpecification(specification);
 
         }
 
-        public Task<IReadOnlyList<Order>> GetOrderForUsersAsync(string buyerEmail)
+        public async Task<IReadOnlyList<Order>> GetOrderForUsersAsync(string buyerEmail)
         {
-            throw new NotImplementedException();
+            var specification = new OrdersWithItemsAndOrderingSpecification(buyerEmail);
+
+            return await _unitOfWork.Repository<Order>().ListAsync(specification);
         }
     }
 }
