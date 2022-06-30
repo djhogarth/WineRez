@@ -11,7 +11,7 @@ namespace Infrastructure.Data.Config
         {
             // Specifying the DeliveryMethod table's price column data type as decimal
             builder.Property(d => d.Price)
-                .HasColumnType("decimal(18,2");
+                .HasColumnType("decimal(18,2)");
         }
         
     }

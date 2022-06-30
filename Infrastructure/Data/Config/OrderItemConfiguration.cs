@@ -14,7 +14,7 @@ namespace Infrastructure.Data.Config
 
             // Specifying the OrderItem table's price column data type as decimal
             builder.Property(oi => oi.Price)
-                .HasColumnType("decimal(18,2");
+                .HasColumnType("decimal(18,2)");
         }
     }
 }
