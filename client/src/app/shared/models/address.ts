@@ -4,6 +4,7 @@ export interface IAddress
   lastName: string;
   streetNumberAndName: string;
   city: string;
+  country: string;
   stateOrProvince: string;
   zipCode: string;
 }

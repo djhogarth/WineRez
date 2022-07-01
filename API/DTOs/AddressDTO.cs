@@ -15,6 +15,8 @@ namespace API.DTOs
         [Required]
         public string StateOrProvince { get; set; }
         [Required]
+        public string Country { get; set; }
+        [Required]
         public string ZipCode { get; set; }
     }
 }
