@@ -67,10 +67,8 @@ export class AccountService
       //return an observable with a null value
       return of(null);
     }
-    let headers = new HttpHeaders();
-    headers = headers.set('Authorization', `Bearer ${token}`);
 
-    return this.http.get(this.baseUrl + 'account', {headers}).pipe(
+    return this.http.get(this.baseUrl + 'account').pipe(
       map((user: IUser) =>
       {
         localStorage.setItem('token', user.token);
