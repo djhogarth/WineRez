@@ -21,7 +21,8 @@ namespace API.Controllers
             _orderService = orderService;
             _mapper = mapper;
         }
-
+        
+        [HttpPost]
         public async Task<ActionResult<Order>> CreateOrder(OrderDTO orderDTO)
         {
             var email = HttpContext.User.RetreiveEmailFromPrincipal();
