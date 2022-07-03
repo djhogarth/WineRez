@@ -78,6 +78,15 @@ export class BasketService
     this.setBasket(basket);
   }
 
+  /*Delete the basket on the client-side
+    and update the related observables */
+  deleteLocalBasket()
+  {
+    this.basketSource.next(null);
+    this.basketTotalSource.next(null);
+    localStorage.removeItem('basket_id');
+  }
+
   /* If the user adds an product to their cart that's already in their cart, increase the item quantity.
     If the user add a unique item to the cart, add a brand new item */
   addOrUpdateItem(items: IBasketItem[], itemToAdd: IBasketItem, quantity: number): IBasketItem[]
@@ -137,13 +146,12 @@ export class BasketService
     }
   }
 
+  // Delete the basket on the API
   deleteBasket(basket: IBasket)
   {
     return this.http.delete(this.baseUrl + 'basket?basketId=' + basket.id).subscribe(() =>
     {
-      this.basketSource.next(null);
-      this.basketTotalSource.next(null);
-      localStorage.removeItem('basket_id');
+      this.deleteLocalBasket();
     }, error => {
       console.log(error);
     });
