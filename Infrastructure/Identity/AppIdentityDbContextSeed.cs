@@ -19,6 +19,7 @@ namespace Infrastructure.Identity
                     {
                         FirstName = "Bob",
                         LastName = "Mayfield",
+                        Country = "United States",
                         StreetNumberAndName = "10 Main St",
                         City = "New York",
                         StateOrProvince = "New York",
@@ -35,6 +36,7 @@ namespace Infrastructure.Identity
                     {
                         FirstName = "Amy",
                         LastName = "Chesterfield",
+                        Country = "United States",
                         StreetNumberAndName = "200 Maple Dr",
                         City = "Harlem",
                         StateOrProvince = "Brooklyn",
@@ -51,6 +53,7 @@ namespace Infrastructure.Identity
                     {
                         FirstName = "Daniel",
                         LastName = "Smith",
+                        Country = "Canada",
                         StreetNumberAndName = "20 Front St",
                         City = "Toronto",
                         StateOrProvince = "Ontario",
