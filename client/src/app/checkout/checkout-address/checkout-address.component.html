@@ -2,7 +2,12 @@
   <!-- Address Header -->
   <div class="d-flex justify-content-between align-items-center">
     <h4>Shipping Address</h4>
-    <button class="btn btn-success mb-3">
+    <button
+      class="btn btn-success mb-3"
+      (click)="saveUserAddress()"
+      [disabled]="!checkoutForm.get('addressForm').dirty
+        || !checkoutForm.get('addressForm').valid"
+    >
       Save as default address
     </button>
   </div>
