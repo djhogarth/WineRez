@@ -1,6 +1,9 @@
 <!-- Display what they had in their basket -->
 <div class="mt-3">
-  <app-basket-summary [isBasket]="false"></app-basket-summary>
+  <app-basket-summary
+    [isBasket]="false"
+    [items]="(basket$ | async).items"
+  ></app-basket-summary>
 </div>
 <!-- Checkout step navigation buttons  -->
 <div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
