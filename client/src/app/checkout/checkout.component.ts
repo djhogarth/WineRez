@@ -24,6 +24,7 @@ export class CheckoutComponent implements OnInit
     this.createCheckoutForm();
     this.setAddressFormValues();
     this.getBasketTotal();
+    this.updateDeliveryMethodValue();
 
   }
 
@@ -73,6 +74,19 @@ export class CheckoutComponent implements OnInit
   getBasketTotal()
   {
     this.basketTotal$ = this.basketService.basketTotal$;
+  }
+
+  /* Update the already exsiting delivery method ID.
+     Used for when the user returns to checkout and
+     changes delivery method from what it was previously */
+  updateDeliveryMethodValue()
+  {
+    const basket = this.basketService.getCurrentBasketValue();
+    if(basket.deliveryMethodId !== null)
+    {
+      this.checkoutForm.get('deliveryForm').get('deliveryMethod').patchValue
+        (basket.deliveryMethodId.toString());
+    }
   }
 
 }

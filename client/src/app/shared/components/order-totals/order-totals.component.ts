@@ -16,7 +16,7 @@ export class OrderTotalsComponent implements OnInit
   @Input() total: number;
 
 
-  constructor(private basketService: BasketService) { }
+  constructor() { }
 
   ngOnInit(): void
   {

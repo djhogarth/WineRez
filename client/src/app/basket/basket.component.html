@@ -22,7 +22,7 @@
             <app-order-totals
             *ngIf="(basketTotal$ | async)"
             [shippingCost]="(basketTotal$ | async).shippingCost"
-            [subtotal]="(basketTotal$ | async).total"
+            [subtotal]="(basketTotal$ | async).subtotal"
             [total]="(basketTotal$ | async).total"
             ></app-order-totals>
 

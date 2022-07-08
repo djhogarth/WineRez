@@ -22,4 +22,15 @@ export class CheckoutReviewComponent implements OnInit {
   {
     this.basket$ = this.basketService.basketSource$;
   }
+
+  createPaymentIntent()
+  {
+    return this.basketService.createPaymentIntent().subscribe((response: any) =>
+    {
+      console.log('Payment intent created!')
+    }, error =>
+    {
+      console.log(error.message);
+    });
+  }
 }

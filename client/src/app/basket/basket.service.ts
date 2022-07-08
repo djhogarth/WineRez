@@ -27,6 +27,7 @@ export class BasketService
         map((basket: IBasket) =>
         {
           this.basketSource.next(basket);
+          this.shippingPrice = basket.shippingPrice;
           this.calculateBasketTotal();
         })
       );
@@ -57,17 +58,21 @@ export class BasketService
       prices which is returned by the reduce function.
       It is set to start at a value of 0. The 'b' represnets
       each product item in the array. */
-    const subtotal = basket.items.reduce((a,b) => (b.price *b.quantity) + a, 0);
+    const subtotal = basket.items.reduce((a,b) => (b.price * b.quantity) + a, 0);
     const total = subtotal + shippingCost;
 
     // create the IBaskeTotals object and store in  the observable
-    this.basketTotalSource.next({shippingCost,total, subtotal});
+    this.basketTotalSource.next({shippingCost, total, subtotal});
   }
 
   setShippingPrice(deliveryMethod: IDeliveryMethod)
   {
     this.shippingPrice = deliveryMethod.price;
+    const basket = this.getCurrentBasketValue();
+    basket.deliveryMethodId = deliveryMethod.id;
+    basket.shippingPrice = deliveryMethod.price;
     this.calculateBasketTotal();
+    this.setBasket(basket);
   }
 
   addItemToBasket(item: IProduct, quantity: number)
@@ -168,6 +173,18 @@ export class BasketService
     localStorage.setItem('basket_id', basket.id)
 
     return basket;
+  }
+
+  createPaymentIntent()
+  {
+    return this.http.post(this.baseUrl + 'payments/' + this.getCurrentBasketValue().id, {})
+      .pipe(
+        map((basket: IBasket) =>
+        {
+          this.basketSource.next(basket);
+        }
+      )
+    );
   }
 
   private mapProductItemToBasketItem(item: IProduct, quantity: number): IBasketItem
