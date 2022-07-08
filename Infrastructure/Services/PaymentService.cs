@@ -24,14 +24,14 @@ namespace Infrastructure.Services
 
         /*  Create new payment intent if none exists or
             update the payment intent. The payment intent is 
-            updated when the customer makes changes to their order 
-            or basket items */
+            updated when the customer makes changes to their 
+            basket items or order delivery method */
         public async Task<CustomerBasket> CreateOrUpdatePaymentIntent(string basketId)
         {
             StripeConfiguration.ApiKey = _config["StripeSettings:SecretKey"];
 
             var basket = await _basketRepository.GetCustomerBasketAsync(basketId);
-            var shippingPrice = 0m;
+            var shippingPrice = basket.ShippingPrice;
 
             // Getting untampered with shipping price for the delivery method selected at checkout 
             if(basket.DeliveryMethodId.HasValue)
@@ -44,7 +44,7 @@ namespace Infrastructure.Services
 
             foreach(var shoppingCartitem in basket.Items)
             {
-                var productItem = await _unitOfWork.Repository<Domain.Entities.Product>().GetByIdAsync(item.Id);
+                var productItem = await _unitOfWork.Repository<Domain.Entities.Product>().GetByIdAsync(shoppingCartitem.Id);
                 if(shoppingCartitem.Price != productItem.Price)
                 {
                     shoppingCartitem.Price = productItem.Price;
@@ -55,7 +55,7 @@ namespace Infrastructure.Services
             var service = new PaymentIntentService();
             PaymentIntent intent;
             
-            if(!string.IsNullOrEmpty(basket.PaymentIntentId))
+            if(string.IsNullOrEmpty(basket.PaymentIntentId))
             {
                 var options = new PaymentIntentCreateOptions
                 {
@@ -63,7 +63,9 @@ namespace Infrastructure.Services
                     Currency = "cad",
                     PaymentMethodTypes = new List<string>{"card"}
                 };
+
                 intent = await service.CreateAsync(options);
+                
                 basket.PaymentIntentId = intent.Id;
                 basket.ClientSecret = intent.ClientSecret;
             }
@@ -78,6 +80,9 @@ namespace Infrastructure.Services
             }
 
             await _basketRepository.UpdateCustomerBasketAsync(basket);
+
+            // return basket with new or updated payment intent ID
+            return basket;
 
 
         }
