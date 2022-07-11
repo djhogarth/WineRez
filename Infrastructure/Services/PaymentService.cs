@@ -31,6 +31,10 @@ namespace Infrastructure.Services
             StripeConfiguration.ApiKey = _config["StripeSettings:SecretKey"];
 
             var basket = await _basketRepository.GetCustomerBasketAsync(basketId);
+
+            // Check to see if there is a basket beofore creating payment intent
+            if(basket == null) return null;
+            
             var shippingPrice = basket.ShippingPrice;
 
             // Getting untampered with shipping price for the delivery method selected at checkout 
