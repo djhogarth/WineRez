@@ -15,11 +15,19 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>>
   {
-    // don't display the page loader for email validation request
-    if(!request.url.includes('emailexists'))
+    //Don't show loading indicator for post requests for orders
+    if(request.method === 'POST' && request.url.includes('order'))
     {
-      this.loadingService.loading();
+      // move on to the next request and skip this one
     }
+
+    // don't display the page loader for email validation request
+    if(request.url.includes('emailexists'))
+    {
+      return next.handle(request);
+    }
+
+    this.loadingService.loading();
     return next.handle(request).pipe(
       delay(1000),
       finalize(() => {

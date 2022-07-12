@@ -26,8 +26,16 @@
     <i class="fa fa-angle-left"></i>
     Review Order
   </button>
-  <button class="btn btn-primary" (click)="submitOrder()">
-    <i class="fa fa-angle-right"></i>
-   Submit Order
+  <!-- Submit payment button -->
+  <button
+    [disabled]="loadingState
+    || checkoutForm.get('paymentForm').invalid
+    || !cardNumberValid
+    || !cardExpiryValid
+    || !cardCvcValid"
+    class="btn btn-primary"
+    (click)="submitOrder()">
+   Submit Order <i class="fa fa-angle-right"></i>
+   <i *ngIf="loadingState" class="fa fa-spinner fa-spin ms-1"></i>
   </button>
 </div>

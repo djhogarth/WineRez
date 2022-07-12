@@ -21,9 +21,8 @@
       <i class="fa fa-angle-left"></i>
       Change Shipping Address
     </button>
-    <button class="btn btn-primary" cdkStepperNext>
-      <i class="fa fa-angle-right"></i>
-     Review Order
+    <button [disabled]="checkoutForm.get('deliveryForm').invalid" class="btn btn-primary" cdkStepperNext>
+     Review Order <i class="fa fa-angle-right"></i>
     </button>
   </div>
 </div>
