@@ -28,7 +28,7 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
   cardCvc: any;
   cardErrors: any;
   cardHandler = this.onChange.bind(this);
-  
+
   // local variables to hold validation state of stripe elements
   loadingState = false;
   cardNumberValid = false;
@@ -83,7 +83,7 @@ export class CheckoutPaymentComponent implements AfterViewInit, OnDestroy {
 
       if (paymentResult.paymentIntent)
       {
-        this.basketService.deleteLocalBasket();
+        this.basketService.deleteBasket(basket);
         const navigationExtras: NavigationExtras = { state: createOrder };
         this.router.navigate(['checkout/success'], navigationExtras)
       } else {

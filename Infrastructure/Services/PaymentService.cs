@@ -2,8 +2,10 @@
 using Domain.Entities;
 using Domain.Entities.OrderAggregate;
 using Domain.Interfaces;
+using Domain.Specifications;
 using Microsoft.Extensions.Configuration;
 using Stripe;
+using Order = Domain.Entities.OrderAggregate.Order;
 
 namespace Infrastructure.Services
 {
@@ -89,6 +91,35 @@ namespace Infrastructure.Services
             return basket;
 
 
+        }
+
+        public async Task<Order> UpdateOrderStatusPaymentFailed(string paymentIntentId)
+        {
+            var specification = new OrderByPaymentIntentIdSpecification(paymentIntentId);
+            var order = await _unitOfWork.Repository<Order>().GetEntityWithSpecification(specification);
+
+            if (order == null) return null;
+
+            order.Status = OrderStatus.PaymentFailed;
+            
+            await _unitOfWork.Complete();
+
+            return order;
+        }
+
+        public async Task<Order> UpdateOrderStatusPaymentSucceeded(string paymentIntentId)
+        {
+            var specification = new OrderByPaymentIntentIdSpecification(paymentIntentId);
+            var order = await _unitOfWork.Repository<Order>().GetEntityWithSpecification(specification);
+
+            if(order == null) return null;
+
+            order.Status = OrderStatus.PaymentReceived;
+            _unitOfWork.Repository<Order>().Update(order);
+
+            await _unitOfWork.Complete();
+
+            return order;
         }
     }
 }
