@@ -10,10 +10,10 @@ namespace Infrastructure.Services
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly PaymentService _paymentService;
+        private readonly IPaymentService _paymentService;
 
         public OrderService(IBasketRepository basketRepository, IUnitOfWork unitOfWork,
-            PaymentService paymentService)
+            IPaymentService paymentService)
         {
             _basketRepository = basketRepository;
             _unitOfWork = unitOfWork;
@@ -40,14 +40,17 @@ namespace Infrastructure.Services
             //check if order exists and delete it does, to avoid duplicates
             var specification = new OrderByPaymentIntentIdWithItemsSpecification(basket.PaymentIntentId);
             var existingOrder = await _unitOfWork.Repository<Order>().GetEntityWithSpecification(specification);
-            if(existingOrder != null)
-            {
-                _unitOfWork.Repository<Order>().Delete(existingOrder);
-                await _paymentService.CreateOrUpdatePaymentIntent(basket.PaymentIntentId);
-            }
+            
             // create the order
             var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal, basket.PaymentIntentId);
             _unitOfWork.Repository<Order>().Add(order);
+
+            if(existingOrder != null)
+            {
+                _unitOfWork.Repository<Order>().Delete(existingOrder);
+                await _paymentService.CreateOrUpdatePaymentIntent(basket.Id);
+            }
+
             // save the order to the database
             var result = await _unitOfWork.Complete();
             if(result <= 0) return null;
