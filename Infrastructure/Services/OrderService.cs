@@ -38,7 +38,7 @@ namespace Infrastructure.Services
             // calculate the subtotal
             var subtotal = items.Sum( item => item.Price * item.Quantity);
             //check if order exists and delete it does, to avoid duplicates
-            var specification = new OrderByPaymentIntentIdWithItemsSpecification(basket.PaymentIntentId);
+            var specification = new OrderByPaymentIntentIdSpecification(basket.PaymentIntentId);
             var existingOrder = await _unitOfWork.Repository<Order>().GetEntityWithSpecification(specification);
             
             // create the order
