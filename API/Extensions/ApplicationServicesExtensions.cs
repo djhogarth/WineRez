@@ -1,4 +1,3 @@
-using System.Linq;
 using API.Errors;
 using Domain.Interfaces;
 using Infrastructure.Data;
