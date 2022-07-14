@@ -18,7 +18,15 @@ export class LoadingInterceptor implements HttpInterceptor {
     //Don't show loading indicator for post requests for orders
     if(request.method === 'POST' && request.url.includes('order'))
     {
-      // move on to the next request and skip this one
+      return next.handle(request);
+
+    }
+
+    // Don't show loading indicator for delete requests made to the API
+    if(request.method === 'DELETE')
+    {
+      return next.handle(request);
+
     }
 
     // don't display the page loader for email validation request

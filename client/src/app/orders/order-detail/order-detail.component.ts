@@ -31,7 +31,6 @@ export class OrderDetailComponent implements OnInit {
     .subscribe((returnedOrder: IOrder) =>
     {
       this.order = returnedOrder;
-      console.log("" + returnedOrder.orderItems[0].price)
       this.breadcrumbService.set('@OrderDetails', `Order #${this.order.id} - Status: ${this.order.status}`);
     }, error =>
     {

@@ -28,7 +28,7 @@ export class AppComponent implements OnInit
 
       this.accountService.loadCurrentUser(token).subscribe(() =>
       {
-        console.log('current is user loaded... with wine that is :D');
+        
       }, error =>
       {
         console.log(error);
