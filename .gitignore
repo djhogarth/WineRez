@@ -6,3 +6,5 @@ appsettings.json
 *.db-wal
 appsettings.Development.json
 docker-compose.yml
+publish/
+wwwroot/
