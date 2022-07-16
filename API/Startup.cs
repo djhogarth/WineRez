@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Extensions;
 using StackExchange.Redis;
 using Infrastructure.Identiity;
+using Microsoft.Extensions.FileProviders;
 
 namespace API
 {
@@ -25,12 +26,12 @@ namespace API
             services.AddControllers();
             //Add a service for the store's DbContext
             services.AddDbContext<StoreContext>(x =>
-                x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+                x.UseNpgsql(_config.GetConnectionString("DefaultConnection")));
 
             //Add a service for the Identity DbContext
             services.AddDbContext<AppIdentityDbContext>( x=>
             {
-                x.UseSqlite(_config.GetConnectionString("IdentityConnection"));
+                x.UseNpgsql(_config.GetConnectionString("IdentityConnection"));
             });
 
             //Add a service for Redis
@@ -56,23 +57,30 @@ namespace API
         {
             app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseSwaggerDocumentation();
-
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "Content")
+                ), RequestPath = "/content"
+            });
 
             app.UseCors("Cors Policy");
             
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSwaggerDocumentation();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

@@ -6,4 +6,10 @@ img {
   object-fit: cover;
   height: 37.5rem;
   width: 6.25rem;
+  display: block;
+  width: 100%;
+}
+
+.slide {
+  transition: transform 150ms cubic-bezier(.25,.46,.45,.84);
 }

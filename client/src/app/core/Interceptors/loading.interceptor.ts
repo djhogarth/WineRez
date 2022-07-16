@@ -37,8 +37,7 @@ export class LoadingInterceptor implements HttpInterceptor {
 
     this.loadingService.loading();
     return next.handle(request).pipe(
-      delay(1000),
-      finalize(() => {
+     finalize(() => {
         this.loadingService.idle();
       })
     );

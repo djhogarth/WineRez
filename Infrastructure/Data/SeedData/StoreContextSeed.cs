@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using Domain.Entities;
 using Domain.Entities.OrderAggregate;
@@ -11,10 +12,12 @@ namespace Infrastructure.Data.SeedData
         {
             try
             {
+                var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
                 // Insert product brands seed data
                 if (!context.ProductBrands.Any())
                 {
-                    var brandsData = File.ReadAllText("../Infrastructure/Data/SeedData/brands.json");
+                    var brandsData = File.ReadAllText(path + @"/Data/SeedData/brands.json");
 
                     var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
 
@@ -29,7 +32,7 @@ namespace Infrastructure.Data.SeedData
                 // Insert product types seed data
                 if (!context.ProductTypes.Any())
                 {
-                    var typesData = File.ReadAllText("../Infrastructure/Data/SeedData/types.json");
+                    var typesData = File.ReadAllText(path + @"/Data/SeedData/types.json");
 
                     var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
 
@@ -44,7 +47,7 @@ namespace Infrastructure.Data.SeedData
                 // Insert products seed data
                 if(!context.Products.Any())
                 {
-                    var productsData = File.ReadAllText("../Infrastructure/Data/SeedData/products.json");
+                    var productsData = File.ReadAllText(path + @"/Data/SeedData/products.json");
 
                     var products = JsonSerializer.Deserialize<List<Product>>(productsData);
 
@@ -58,7 +61,7 @@ namespace Infrastructure.Data.SeedData
                 // Insert delivery methods seed data
                 if (!context.DeliveryMethods.Any())
                 {
-                    var deliveryMethodData = File.ReadAllText("../Infrastructure/Data/SeedData/delivery.json");
+                    var deliveryMethodData = File.ReadAllText(path + @"/Data/SeedData/delivery.json");
 
                     var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryMethodData);
 

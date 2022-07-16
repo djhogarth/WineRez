@@ -5,7 +5,6 @@ using Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
-using Domain.Entities.OrderAggregate;
 using Order = Domain.Entities.OrderAggregate.Order;
 
 namespace API.Controllers
@@ -13,11 +12,12 @@ namespace API.Controllers
     public class PaymentsController : BaseApiController
     {
         private readonly IPaymentService _paymentService;
-        private const string whSecret = "whsec_ccb57254de580f161f4232083cebc3b556a816b0809cf430c92665b4858ff153";
+        private readonly string _whSecret;
 
-        public PaymentsController(IPaymentService paymentService)
+        public PaymentsController(IPaymentService paymentService, IConfiguration config)
         {
             _paymentService = paymentService;
+           _whSecret = config.GetSection("StripeSettings:WhSecret").Value;
         }
 
         [Authorize]
@@ -40,7 +40,7 @@ namespace API.Controllers
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
             
             var stripeEvent = EventUtility.ConstructEvent(json, 
-                Request.Headers["Stripe-Signature"], whSecret);
+                Request.Headers["Stripe-Signature"], _whSecret);
             
             PaymentIntent intent;
             Order order;
