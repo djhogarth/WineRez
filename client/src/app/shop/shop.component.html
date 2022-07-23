@@ -5,8 +5,9 @@
     <section class="col-3">
       <ng-container *ngIf="types && brands">
         <!-- Sorting Selector -->
-      <h5 class="mt-5 ms-2 text-danger fw-bold"><strong>Sort</strong></h5>
-      <select class="custom-select mb-4 " (change)="onSortSelected($event.target.value)">
+      <h4 class="mt-5 ms-2 text-danger"><strong>Sort</strong></h4>
+
+      <select class="custom-select mb-4 w-100" (change)="onSortSelected($event.target.value)">
         <option
           *ngFor="let sort of sortOptions"
           [selected]="shopParams.selectedSort === sort.value"
@@ -16,17 +17,18 @@
       </select>
 
       <!-- Types Filter -->
-      <h5 class="text-danger ms-2 fw-bold"><strong>Types</strong></h5>
+      <h4 class="text-danger ms-2"><strong>Types</strong></h4>
+      <hr>
       <ul class="list-group my-3">
         <li class="list-group-item" *ngFor="let type of types" [class.active]="type.id === this.shopParams.selectedTypeId"
           [value]="type.id" (click)="onTypeSelected(type.id)">
           <strong>{{type.name}}</strong>
-
         </li>
       </ul>
 
       <!-- Brands Filter -->
-      <h5 class="text-danger ms-2 fw-bold"><strong>Brands</strong></h5>
+      <h4 class="text-danger ms-2"><strong>Brands</strong></h4>
+      <hr>
       <ul class="list-group my-3">
         <li class="list-group-item" *ngFor="let brand of brands" [class.active]="brand.id === this.shopParams.selectedBrandId"
           [value]="brand.id" (click)="onBrandSelected(brand.id)">
@@ -41,17 +43,22 @@
     <section class="col-9">
       <div class="d-flex justify-content-between align-items-center pb-2">
         <!-- Pagination Header -->
-        <app-paging-header
-        [totalCount]="totalCount"
-        [pageSize]="this.shopParams.pageSize"
-        [pageNumber]="this.shopParams.pageNumber">
-        </app-paging-header>
+        <div class="container">
+          <app-paging-header
+          [totalCount]="totalCount"
+          [pageSize]="this.shopParams.pageSize"
+          [pageNumber]="this.shopParams.pageNumber">
+          </app-paging-header>
+        </div>
 
         <!-- Search Bar -->
-        <div class="d-flex" *ngIf="products">
-          <input #search (keyup.enter)="onSearch()" class="form-control me-2" type="search" style="width: 18.75rem" placeholder="Search">
-          <button (click)="onSearch()" class="btn btn-success">Search</button>
-          <button (click)="onReset()" class="btn btn-secondary ms-2">Reset</button>
+        <div class="d-flex w-100 flex-column" *ngIf="products">
+          <input #search (keyup.enter)="onSearch()" class="form-control me-2 w-100" type="search" style="width: 18.75rem" placeholder="Search">
+          <div class="d-flex mt-2">
+            <button (click)="onSearch()" class="btn btn-success">Search</button>
+            <button (click)="onReset()" class="btn btn-secondary ms-2">Reset</button>
+          </div>
+
         </div>
       </div>
       <!-- Display product items -->

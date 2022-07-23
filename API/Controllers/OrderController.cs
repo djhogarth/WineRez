@@ -1,4 +1,3 @@
-
 using API.DTOs;
 using API.Errors;
 using API.Extensions;
@@ -32,7 +31,7 @@ namespace API.Controllers
             var order = await _orderService.CreatedOrderAsync(email, orderDTO.DeliveryMethodId, 
                 orderDTO.BasketId, address);
                 
-            if(order == null) return BadRequest(new ApiResponse(400, "Problem creating order"));
+            if(order == null) return BadRequest(new ApiResponse(400, "There was a problem creating the order"));
 
             return Ok(order);
 

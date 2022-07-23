@@ -1,6 +1,6 @@
 <div class="container mt-1">
   <div *ngIf="(basket$ | async) === null">
-    <p>There are no items in your basket</p>
+    <h2 class="mt-3">There are no items in your basket <i class="fa fa-exclamation-circle" aria-hidden="true"></i></h2>
   </div>
 
   <div *ngIf="basket$ | async">

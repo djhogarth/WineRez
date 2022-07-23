@@ -7,10 +7,11 @@ namespace Infrastructure.Services
 {
     public class ApiResponseCacheService : IApiResponseCacheService
     {
-        private readonly IDatabase _database;
+        private readonly IDatabase _database;       
+
         public ApiResponseCacheService(IConnectionMultiplexer redis)
         {
-            _database = redis.GetDatabase();
+            _database = redis.GetDatabase();            
         }
 
         // insert response so it's cached into the Redis database
@@ -27,21 +28,31 @@ namespace Infrastructure.Services
             };
 
             var serializedResponse = JsonSerializer.Serialize(response, options);
-
-            await _database.StringSetAsync(cacheKey, serializedResponse, timeToLive);
+            if(_database.IsConnected(cacheKey))
+            {
+               await _database.StringSetAsync(cacheKey, serializedResponse, timeToLive);
+               
+            }
+            
         }
 
         // get cached response
-        public async Task<string> GetCacheResponseAsync(string cacheKey)
+        public async Task<string> GetCachedResponseAsync(string cacheKey)
         {
-            var cachedResponse = await _database.StringGetAsync(cacheKey);
-
-            if(cachedResponse.IsNullOrEmpty)
+            if(_database.IsConnected(cacheKey))
             {
-                return null;
-            }
+                var cachedResponse = await _database.StringGetAsync(cacheKey);
 
-            return cachedResponse;
+                if(string.IsNullOrEmpty(cachedResponse))
+                {
+                    return null;
+                } 
+                
+                return cachedResponse;
+            }
+            
+            return null;
+            
         }
     }
 }

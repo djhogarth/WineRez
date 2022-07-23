@@ -1,5 +1,4 @@
 
-
 using System.Text;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -23,9 +22,9 @@ namespace API.Helpers
 
             // check if there is already a cached response with that database key
             var cacheKey = GenerateCacheKeyFromRequest(context.HttpContext.Request);
-            var cachedResponse = await cacheService.GetCacheResponseAsync(cacheKey);
+            var cachedResponse = await cacheService.GetCachedResponseAsync(cacheKey);
 
-            // If thtere is already a cached response, send it back to he client
+            // If thtere is already a cached response, send it back to the client
             if(!string.IsNullOrEmpty(cachedResponse))
             {
                 // Create a content response which contains the cached response from memory

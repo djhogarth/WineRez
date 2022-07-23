@@ -27,8 +27,9 @@ namespace API.Controllers
             _productsRepo = productsRepo;
         }
 
-        [Cached(600)]
+        [Cached(900)]
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]       
         public async Task<ActionResult<Pagination<ProductDTO>>> GetProducts([FromQuery] ProductSpecificationParameters productParams)
         {
             var specification = new ProductsWithTypesAndBrandsSpecification(productParams);
@@ -41,10 +42,10 @@ namespace API.Controllers
             var data = _mapper
                 .Map<IReadOnlyList<Product>, IReadOnlyList<ProductDTO>>(products);
 
-            return Ok( new Pagination<ProductDTO>(productParams.PageIndex, productParams.PageSize, totalItems, data));
+            return Ok(new Pagination<ProductDTO>(productParams.PageIndex, productParams.PageSize, totalItems, data));
         }
 
-        [Cached(600)]
+        [Cached(900)]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -54,13 +55,14 @@ namespace API.Controllers
             var specification = new ProductsWithTypesAndBrandsSpecification(id);
             var product = await _productsRepo.GetEntityWithSpecification(specification);
             
-            if(product == null) return NotFound(new ApiResponse(400));
+            if(product == null) return NotFound(new ApiResponse(404));
 
-            return _mapper.Map<Product, ProductDTO>(product);
+            return _mapper.Map<ProductDTO>(product);
         }
         
-        [Cached(600)]
+        [Cached(900)]
         [HttpGet("brands")]
+        [ProducesResponseType(StatusCodes.Status200OK)]    
 
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
         {
@@ -68,8 +70,9 @@ namespace API.Controllers
             return Ok(brands);
         }
         
-        [Cached(600)]
+        [Cached(900)]
         [HttpGet("types")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
         {
             var types = await _productTypesRepo.ListAllAsync();

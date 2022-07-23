@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <None Include="Data\SeedData\**" CopyToOutputDirectory="PreserveNewest"/>
+    <None Include="Data\SeedData\**" CopyToOutputDirectory="PreserveNewest" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
@@ -16,7 +16,7 @@
   <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="1.1.6" />
   <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.20.0" />
   <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
-  <PackageReference Include="StackExchange.Redis" Version="2.6.45" />
+  <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
   <PackageReference Include="Stripe.net" Version="39.121.0" />
   <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.20.0" />
   </ItemGroup>

@@ -1,10 +1,8 @@
 <div class="d-flex justify-content-center my-2">
   <div class="col-3 form-signin">
     <form  [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="text-center mb-3">
+      <div class="text-center mb-1">
         <img class="img-fluid" src="/assets/images/user-wine.jpg" width="150" height="150" alt="WineRez">
-        <!-- <i class="fa fa-user fa-4x" aria-hidden="true"></i> -->
-        <h1 class="h3 fw-normal">Login</h1>
       </div>
       <!-- Email input -->
      <app-text-input [type]="'email'" formControlName="email" [label]="'email'"></app-text-input>

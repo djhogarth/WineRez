@@ -40,6 +40,7 @@ namespace API
                var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
                return ConnectionMultiplexer.Connect(configuration);
             });
+            
             services.AddApplicationServices();
             services.AddIdentityServices(_config);
             services.AddSwaggerDocumentation();            
@@ -57,9 +58,9 @@ namespace API
         {
             app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseStatusCodePagesWithReExecute("/errors/{0}");
+            app.UseSwaggerDocumentation();
 
-            app.UseHttpsRedirection();
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
             app.UseRouting();
             app.UseStaticFiles();
@@ -73,9 +74,7 @@ namespace API
             app.UseCors("Cors Policy");
             
             app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseSwaggerDocumentation();
+            app.UseAuthorization();          
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,6 +1,4 @@
-using API.DTOs;
-
-namespace API.Controllers
+namespace API.DTOs
 {
     public class OrderDTO
     {
