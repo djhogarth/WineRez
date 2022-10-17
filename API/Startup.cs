@@ -26,12 +26,12 @@ namespace API
             services.AddControllers();
             //Add a service for the store's DbContext
             services.AddDbContext<StoreContext>(x =>
-                x.UseNpgsql(_config.GetConnectionString("DefaultConnection")));
+                x.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
 
             //Add a service for the Identity DbContext
             services.AddDbContext<AppIdentityDbContext>( x=>
             {
-                x.UseNpgsql(_config.GetConnectionString("IdentityConnection"));
+                x.UseSqlServer(_config.GetConnectionString("IdentityConnection"));
             });
 
             //Add a service for Redis
